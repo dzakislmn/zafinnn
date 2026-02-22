@@ -310,6 +310,10 @@
         function tab(e, id) {
             const sfx = document.getElementById('tab-sfx');
             if (sfx) { sfx.currentTime = 0; sfx.play(); }
+        
+            // BUG FIX: Reset scroll ke paling atas setiap pindah menu
+            document.querySelector('.main-content').scrollTop = 0;
+        
             document.querySelectorAll('.section').forEach(s => { s.classList.remove('active'); s.style.display='none'; });
             const target = document.getElementById(id);
             target.style.display = 'block';
