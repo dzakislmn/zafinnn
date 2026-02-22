@@ -71,10 +71,11 @@
         .vault-info { padding: 20px; text-align: center; }
         .vault-info h4 { margin: 0; font-family: 'Orbitron'; font-size: 1.1rem; }
 
-        /* --- LIGHTBOX (SIZE & CLOSE BUTTON) --- */
-        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); display: none; z-index: 20000; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.6s var(--ease-out-expo); }
+        /* --- LIGHTBOX (SUPER FIXED Z-INDEX) --- */
+        /* Z-index dinaikkan jadi 99999999 agar 100% menutupi segalanya */
+        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); display: none; z-index: 99999999 !important; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.6s var(--ease-out-expo); }
         #lightbox.visible { display: flex; opacity: 1; }
-        .close-btn { position: absolute; top: 25px; right: 40px; color: rgba(255,255,255,0.7); font-size: 3rem; font-family: sans-serif; cursor: pointer; z-index: 20001; transition: 0.3s; line-height: 1; }
+        .close-btn { position: absolute; top: 25px; right: 40px; color: rgba(255,255,255,0.7); font-size: 3rem; font-family: sans-serif; cursor: pointer; z-index: 999999999 !important; transition: 0.3s; line-height: 1; }
         .close-btn:hover { color: var(--nebula-blue); transform: scale(1.2); }
         #lightbox-content { width: 90vw; height: 85vh; display: flex; justify-content: center; align-items: center; position: relative; }
         #lightbox-content img, #lightbox-content video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
@@ -132,30 +133,30 @@
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
         
         /* ==========================================================
-           FIX TOTAL: AUTO ZOOM & MENU HILANG DI HP (UPDATE FINAL)
+           FIX TOTAL: TULISAN HILANG, AUTO ZOOM & MENU (KALIBRASI ULANG)
            ========================================================== */
         @media screen and (max-width: 850px) {
-            /* 1. Paksa Menu Utama (.sidebar) nempel di atap layar */
+            /* Sidebar Kunci Atas */
             .sidebar {
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
                 right: 0 !important;
                 width: 100% !important;
-                z-index: 9999999 !important;
+                z-index: 999999 !important;
                 background: rgba(10, 15, 25, 0.98) !important;
                 backdrop-filter: blur(15px) !important;
                 transform: none !important;
             }
 
-            /* 2. Dorong konten web ke bawah supaya gak ketutupan menu yang dipaku & Ruang Hampa di bawah */
+            /* SOLUSI TULISAN HILANG: Dorong secara absolut dari luar, bukan dalam */
             .main-content {
-                padding-top: 90px !important;
-                padding-bottom: 50vh !important;
-                scroll-padding-top: 100px !important;
+                margin-top: 80px !important; /* Paksa turun konten agar judul 100% terlihat */
+                padding-top: 20px !important; 
+                padding-bottom: 25vh !important; /* Ruang napas secukupnya buat keyboard */
             }
 
-            /* 3. Matikan Auto-Zoom HP (Font Input WAJIB 16px) */
+            /* Matikan Auto-Zoom HP */
             input[type="text"], 
             textarea, 
             .comment-name, 
@@ -354,19 +355,17 @@
            const sfx = document.getElementById('tab-sfx');
            if (sfx) { sfx.currentTime = 0; sfx.play(); }
       
-           // 1. Tutup semua kartu karakter yang terbuka agar tidak nyangkut
            document.querySelectorAll('.profile-card').forEach(card => card.classList.remove('expanded'));
            document.querySelectorAll('.section').forEach(s => { s.classList.remove('active'); s.style.display='none'; });
            const target = document.getElementById(id);
            target.style.display = 'block';
            
-           // 2. Matikan smooth sejenak, paksa lempar ke atas, lalu hidupkan lagi
            const mainContent = document.querySelector('.main-content');
-           mainContent.style.scrollBehavior = 'auto'; // Matikan smooth
-           mainContent.scrollTop = 0; // Lempar ke atas paksa!
+           mainContent.style.scrollBehavior = 'auto'; 
+           mainContent.scrollTop = 0; 
           
            setTimeout(() => {
-               mainContent.style.scrollBehavior = 'smooth'; // Hidupkan smooth lagi
+               mainContent.style.scrollBehavior = 'smooth'; 
                target.classList.add('active');
            }, 50);
 
@@ -375,23 +374,15 @@
            e.currentTarget.classList.add('active');
        }
 
+        // SOLUSI KARTU NYUNGSEP: Sekarang posisinya pasti pas di TENGAH Layar
         function toggleProfile(cardElement) {
             cardElement.classList.toggle('expanded');
             const charSfx = document.getElementById('char-sfx');
             if (charSfx) { charSfx.currentTime = 0; charSfx.play(); }
         
-            // Logika Auto-Scroll SUPER AKURAT (Aman untuk Layar HP & Pasti Jalan)
             if (cardElement.classList.contains('expanded')) {
                 setTimeout(() => {
-                    const scrollArea = document.querySelector('.main-content');
-                    const cardPos = cardElement.getBoundingClientRect();
-                    const areaPos = scrollArea.getBoundingClientRect();
-                    
-                    // Menghitung selisih jarak persis antara kartu dan batas atas area scroll
-                    scrollArea.scrollBy({
-                        top: cardPos.top - areaPos.top - 20, // 20px adalah jarak nafas agar tidak terlalu mepet atas
-                        behavior: 'smooth'
-                    });
+                    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 300); 
             }
         }
@@ -400,7 +391,6 @@
         function openLightbox(type, src) {
             const l = document.getElementById('lightbox');
             const cont = document.getElementById('lightbox-content');
-            // Menambahkan kontrol yang pas agar video bisa autoplay
             cont.innerHTML = type === 'img' ? `<img src="${src}">` : `<video src="${src}" controls autoplay playsinline></video>`;
             l.style.display = 'flex';
             setTimeout(() => l.classList.add('visible'), 50);
@@ -410,7 +400,6 @@
             l.classList.remove('visible');
             setTimeout(() => {
                 l.style.display = 'none';
-                // BUG FIX: Hapus konten agar suara video langsung mati
                 document.getElementById('lightbox-content').innerHTML = ''; 
             }, 600);
         }
@@ -523,9 +512,8 @@
         // ==========================================================
         const interactiveElements = document.querySelectorAll('.profile-card, .spotify-box, .vault-item, .comment-box-wrapper');
         interactiveElements.forEach(el => {
-            // Efek saat kursor bergerak di atas elemen (Untuk PC/Laptop)
             el.addEventListener('mousemove', (e) => {
-                if (el.classList.contains('expanded')) return; // Kunci gerakan jika kartu sedang terbuka
+                if (el.classList.contains('expanded')) return; 
                 
                 const rect = el.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -533,7 +521,6 @@
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                // Kalkulasi kemiringan 3D (Maksimal 8 derajat agar tetap elegan)
                 const rotateX = ((y - centerY) / centerY) * -8; 
                 const rotateY = ((x - centerX) / centerX) * 8;  
 
@@ -541,26 +528,22 @@
                 el.style.transition = 'transform 0.1s ease-out';
             });
 
-            // Fungsi mengembalikan desain ke posisi datar
             const resetTransform = () => {
                 if (el.classList.contains('expanded')) {
-                    el.style.transform = ''; // Biarkan CSS asli yang mengambil alih
+                    el.style.transform = ''; 
                     return;
                 }
                 el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-                el.style.transition = 'var(--transit-ultra)'; // Gunakan transisi mulus bawaanmu
+                el.style.transition = 'var(--transit-ultra)'; 
                 
-                // Bersihkan gaya paksa setelah animasi selesai agar tidak bentrok
                 setTimeout(() => {
                     if (!el.classList.contains('expanded')) el.style.transform = '';
                 }, 800);
             };
 
-            // Saat kursor pergi atau jari dilepas
             el.addEventListener('mouseleave', resetTransform);
             el.addEventListener('touchend', resetTransform);
             
-            // Efek saat jari pertama kali menyentuh di layar HP (Memberi kesan empuk ditekan)
             el.addEventListener('touchstart', () => {
                 if (el.classList.contains('expanded')) return;
                 el.style.transform = `perspective(1000px) scale(0.98)`;
