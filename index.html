@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Space - Ultra Smooth Locked Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Orbitron:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-black: #05070a;
+            --sidebar-color: rgba(10, 15, 25, 0.95);
+            --nebula-blue: #00d2ff;
+            --nebula-purple: #a18cd1;
+            --star-white: #ffffff;
+            --card-glass: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e6ed;
+            --text-dim: #b2bec3;
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --transit-ultra: all 0.8s var(--ease-out-expo);
+        }
+
+        /* --- GLOBAL & SMOOTHING --- */
+        * { cursor: none !important; box-sizing: border-box; -webkit-tap-highlight-color: transparent; scrollbar-width: none; }
+        ::-webkit-scrollbar { display: none; }
+        body { font-family: 'Quicksand', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--space-black); color: var(--text-main); overflow: hidden; user-select: none; }
+        #star-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+        /* --- MAGNETIC CURSOR --- */
+        #custom-cursor { position: fixed; width: 8px; height: 8px; background: var(--star-white); border-radius: 50%; pointer-events: none; z-index: 10000; box-shadow: 0 0 15px var(--nebula-blue); transform: translate(-50%, -50%); }
+        #cursor-trail { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(161, 140, 209, 0.4); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.2s var(--ease-out-expo); }
+
+        /* --- SIDEBAR --- */
+        .sidebar { width: 280px; background: var(--sidebar-color); display: flex; flex-direction: column; padding: 40px 20px; border-right: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); z-index: 10; }
+        .sidebar h2 { font-family: 'Orbitron', sans-serif; color: var(--nebula-blue); font-size: 0.8rem; letter-spacing: 5px; text-align: center; margin-bottom: 50px; }
+        .menu-item { padding: 18px 25px; margin-bottom: 12px; cursor: pointer; border-radius: 25px; transition: var(--transit-ultra); color: var(--text-dim); font-size: 0.95rem; font-weight: 600; }
+        .menu-item.active { background: linear-gradient(135deg, #00d2ff 0%, #a18cd1 100%); color: white; box-shadow: 0 15px 30px rgba(0, 210, 255, 0.2); transform: scale(1.05) translateX(5px); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { flex: 1; padding: 60px; overflow-y: auto; background: transparent; z-index: 5; position: relative; -webkit-overflow-scrolling: touch; }
+        #title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 40px; background: linear-gradient(to right, #fff, var(--nebula-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section { display: none; opacity: 0; transform: scale(0.98) translateY(30px); transition: var(--transit-ultra); }
+        .section.active { display: block; opacity: 1; transform: scale(1) translateY(0); }
+
+        /* --- SPOTIFY BOX STYLE --- */
+        .spotify-box {
+            display: flex; align-items: center; gap: 20px;
+            background: rgba(29, 185, 84, 0.1);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            padding: 20px; border-radius: 25px;
+            margin-top: 30px; cursor: pointer;
+            transition: var(--transit-ultra);
+            text-decoration: none; color: inherit;
+        }
+        .spotify-box:hover {
+            background: rgba(29, 185, 84, 0.2);
+            border-color: #1DB954;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.2);
+        }
+        .spotify-icon { width: 50px; height: 50px; background: #1DB954; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+        .spotify-text h4 { margin: 0; font-family: 'Orbitron'; font-size: 1rem; color: #1DB954; }
+        .spotify-text p { margin: 5px 0 0; font-size: 0.8rem; color: var(--text-dim); }
+
+        /* --- PROFILE CARD & VAULT --- */
+        .profile-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .profile-card { background: var(--card-glass); padding: 40px; border-radius: 45px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transit-ultra); cursor: pointer; backdrop-filter: blur(15px); }
+        .profile-card.expanded { transform: scale(1.02); background: rgba(255, 255, 255, 0.1); }
+        .profile-img-wrapper { position: relative; width: 150px; height: 150px; margin: 0 auto 25px; transition: var(--transit-ultra); }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--nebula-blue); background-size: cover; background-position: center; }
+        .profile-details { max-height: 0; opacity: 0; transition: var(--transit-ultra); overflow: hidden; }
+        .profile-card.expanded .profile-details { max-height: 500px; opacity: 1; margin-top: 30px; }
+        .bar-bg { background: rgba(255,255,255,0.05); height: 8px; border-radius: 20px; overflow: hidden; margin-top: 10px; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--nebula-blue), var(--nebula-purple)); transform: scaleX(0); transform-origin: left; transition: transform 1.5s var(--ease-out-expo) 0.2s; }
+        .profile-card.expanded .bar-fill { transform: scaleX(1); }
+        .vault-item { background: var(--card-glass); border-radius: 40px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255, 255, 255, 0.03); transition: var(--transit-ultra); opacity: 0; transform: translateY(40px); }
+        .vault-item.show { opacity: 1; transform: translateY(0); }
+        .media-box { width: 100%; min-height: 300px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); display: none; z-index: 20000; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.6s var(--ease-out-expo); }
+        #lightbox.visible { display: flex; opacity: 1; }
+
+        /* --- AUDIO CONTROL --- */
+        #audio-control {
+            position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            z-index: 10001; transition: var(--transit-ultra); backdrop-filter: blur(10px);
+        }
+        #audio-control:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
+        #audio-icon { font-size: 1.2rem; }
+
+        @media (max-width: 850px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; padding: 15px; border-right: none; }
+            .sidebar h2 { display: none; }
+            .main-content { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" src="Ravyn Lenae - Love Me Not.mp3" loop autoplay></audio>
+    <audio id="tab-sfx" src="Tap dasboard.mp3"></audio>
+    <audio id="char-sfx" src="Character.mp3"></audio>
+    <audio id="global-click-sfx" src="Klik.wav"></audio>
+
+    <div id="audio-control" onclick="toggleAudio()">
+        <span id="audio-icon">⏸️</span>
+    </div>
+
+    <canvas id="star-canvas"></canvas>
+    <div id="custom-cursor"></div>
+    <div id="cursor-trail"></div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <div id="lightbox-content" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <div class="sidebar">
+        <h2>SPACE CORE</h2>
+        <div class="menu-item active" onclick="tab(event, 'dash')">🏠 Dashboard</div>
+        <div class="menu-item" onclick="tab(event, 'crew')">👥 Crew Profile</div>
+        <div class="menu-item" onclick="tab(event, 'memories')">🌌 Memory Bersama</div>
+    </div>
+
+    <div class="main-content">
+        <h1 id="title">Command Center</h1>
+
+        <div id="dash" class="section active">
+            <div class="profile-card" style="cursor: default; text-align: left;">
+                <h3 style="font-family: 'Orbitron';">System Online ✨</h3>
+                <p style="color: var(--text-dim); line-height: 1.8;">Selamat datang kembali di pusat kendali. Modul musik romantis siap diluncurkan.</p>
+                
+                <a href="https://open.spotify.com/playlist/0kccGcW8Let4mC5bTSnJE1?si=AMxwLbOITtWQ2oxnRAu0lA&pi=jZmpQ6pJTyirT" target="_blank" class="spotify-box">
+                    <div class="spotify-icon">♫</div>
+                    <div class="spotify-text">
+                        <h4>Our Space Playlist</h4>
+                        <p>Klik untuk mendengarkan lagu bersama 🚀</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div id="crew" class="section">
+            <div class="profile-container">
+                <div class="profile-card" onclick="toggleProfile(this)">
+                    <div class="profile-img-wrapper" onclick="event.stopPropagation(); openLightbox('img', 'foto-kamu.jpg')">
+                        <div class="profile-img" style="background-image: url('foto-kamu.jpg');"></div>
+                    </div>
+                    <h3>[Namamu]</h3>
+                    <p style="color:var(--nebula-blue); font-size:0.8rem; letter-spacing:3px; font-weight:700;">THE PROTECTOR 🛡️</p>
+                    <div class="profile-details" onclick="event.stopPropagation()">
+                        <div class="stat-label" style="font-size: 0.7rem; display:flex; justify-content:space-between; margin-bottom:5px;">Loyalty <span>100%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 100%;"></div></div>
+                        <p style="font-size: 0.9rem; margin-top: 20px; line-height: 1.8; color: var(--text-dim);">Pelindung orbit yang menjaga setiap detak jantung agar tetap sinkron.</p>
+                    </div>
+                </div>
+                <div class="profile-card" onclick="toggleProfile(this)">
+                    <div class="profile-img-wrapper" onclick="event.stopPropagation(); openLightbox('img', 'foto-dia.jpg')">
+                        <div class="profile-img" style="background-image: url('foto-dia.jpg'); border-color: var(--nebula-purple);"></div>
+                    </div>
+                    <h3>[Namanya]</h3>
+                    <p style="color:var(--nebula-purple); font-size:0.8rem; letter-spacing:3px; font-weight:700;">THE SUNSHINE ☀️</p>
+                    <div class="profile-details" onclick="event.stopPropagation()">
+                        <div class="stat-label" style="font-size: 0.7rem; display:flex; justify-content:space-between; margin-bottom:5px;">Cuteness <span>100%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 100%; background: var(--nebula-purple);"></div></div>
+                        <p style="font-size: 0.9rem; margin-top: 20px; line-height: 1.8; color: var(--text-dim);">Gravitasi terindah yang selalu menarikku kembali ke arah kebahagiaan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="memories" class="section">
+            <div class="vault-container">
+                <div class="vault-item">
+                    <div class="media-box" onclick="openLightbox('img', 'MEMORY_FOTO_1.jpg')"><span>[ VIEW PHOTO ]</span></div>
+                    <div class="vault-info"><h4>Supernova Moment ☄️</h4></div>
+                </div>
+                <div class="vault-item">
+                    <div class="media-box" onclick="openLightbox('vid', 'MEMORY_VIDEO_1.mp4')"><span>[ VIEW VIDEO ]</span></div>
+                    <div class="vault-info"><h4>Transmission Archive 🚀</h4></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- STARFIELD & CURSOR (LOCKED) ---
+        const canvas = document.getElementById('star-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        class Star { constructor() { this.init(); } init() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 1.5; this.speed = Math.random() * 0.3; this.opacity = Math.random(); } draw() { ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } update() { this.y += this.speed; if (this.y > canvas.height) this.y = 0; } }
+        for(let i=0; i<150; i++) stars.push(new Star());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
+        window.addEventListener('resize', resize); resize(); animate();
+
+        const c = document.getElementById('custom-cursor');
+        const t = document.getElementById('cursor-trail');
+        let mouseX = 0, mouseY = 0, trailX = 0, trailY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; c.style.left = mouseX + 'px'; c.style.top = mouseY + 'px'; });
+        function updateTrail() { trailX += (mouseX - trailX) * 0.15; trailY += (mouseY - trailY) * 0.15; t.style.left = trailX + 'px'; t.style.top = trailY + 'px'; requestAnimationFrame(updateTrail); }
+        updateTrail();
+
+        // --- GLOBAL CLICK SFX HANDLER (NEW) ---
+        document.addEventListener('click', function(e) {
+            const isMenu = e.target.closest('.menu-item');
+            const isCharacterCard = e.target.closest('.profile-card[onclick="toggleProfile(this)"]');
+            const isPhotoWrapper = e.target.closest('.profile-img-wrapper');
+            const isProfileDetails = e.target.closest('.profile-details');
+
+            // 1. Kecuali: Menu Tab (Sudah ada suara Tap dasboard.mp3)
+            if (isMenu) return;
+            
+            // 2. Kecuali: Kartu Karakter (Sudah ada suara Character.mp3)
+            // Namun, jika yang diklik di DALAM kartu adalah fotonya atau detailnya, kita biarkan suara klik biasa berjalan.
+            if (isCharacterCard && !isPhotoWrapper && !isProfileDetails) return;
+
+            // Memutar suara klik universal
+            const globalSfx = document.getElementById('global-click-sfx');
+            if (globalSfx) {
+                globalSfx.currentTime = 0;
+                globalSfx.play().catch(err => console.log("Global click play failed:", err));
+            }
+        }, true); // Parameter `true` (Capture) agar suara tetap keluar meski ada stopPropagation
+
+        // --- TAB SYSTEM WITH SFX ---
+        function tab(e, id) {
+            const sfx = document.getElementById('tab-sfx');
+            if (sfx) { sfx.currentTime = 0; sfx.play().catch(err => console.log("SFX play failed:", err)); }
+
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(s => { s.classList.remove('active'); s.style.display='none'; });
+            const target = document.getElementById(id);
+            target.style.display = 'block';
+            setTimeout(() => target.classList.add('active'), 50);
+            if(id === 'memories') {
+                document.querySelectorAll('.vault-item').forEach((it, i) => {
+                    setTimeout(() => it.classList.add('show'), i * 150);
+                });
+            }
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+        }
+
+        // --- PROFILE TOGGLE SYSTEM WITH SFX ---
+        function toggleProfile(cardElement) {
+            cardElement.classList.toggle('expanded');
+            
+            const charSfx = document.getElementById('char-sfx');
+            if (charSfx) {
+                charSfx.currentTime = 0;
+                charSfx.play().catch(err => console.log("Character SFX play failed:", err));
+            }
+        }
+
+        // --- LIGHTBOX ---
+        function openLightbox(type, src) {
+            const l = document.getElementById('lightbox');
+            const cont = document.getElementById('lightbox-content');
+            cont.innerHTML = type === 'img' ? `<img src="${src}">` : `<video src="${src}" controls autoplay></video>`;
+            l.style.display = 'flex';
+            setTimeout(() => l.classList.add('visible'), 50);
+        }
+        function closeLightbox() {
+            const l = document.getElementById('lightbox');
+            l.classList.remove('visible');
+            setTimeout(() => { l.style.display = 'none'; }, 600);
+        }
+
+        // --- AUDIO CONTROLS ---
+        const bgMusic = document.getElementById('bg-music');
+        const audioIcon = document.getElementById('audio-icon');
+
+        document.body.addEventListener('click', () => {
+             if (bgMusic.paused && audioIcon.innerText === '⏸️') {
+                 bgMusic.play().catch(error => console.log("Audio play failed:", error));
+             }
+        }, { once: true });
+
+        function toggleAudio() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                audioIcon.innerText = '⏸️';
+            } else {
+                bgMusic.pause();
+                audioIcon.innerText = '▶️';
+            }
+        }
+    </script>
+</body>
+</html>
