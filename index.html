@@ -72,7 +72,6 @@
         .vault-info h4 { margin: 0; font-family: 'Orbitron'; font-size: 1.1rem; }
 
         /* --- LIGHTBOX (SUPER FIXED Z-INDEX) --- */
-        /* Z-index dinaikkan jadi 99999999 agar 100% menutupi segalanya */
         #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); display: none; z-index: 99999999 !important; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.6s var(--ease-out-expo); }
         #lightbox.visible { display: flex; opacity: 1; }
         .close-btn { position: absolute; top: 25px; right: 40px; color: rgba(255,255,255,0.7); font-size: 3rem; font-family: sans-serif; cursor: pointer; z-index: 999999999 !important; transition: 0.3s; line-height: 1; }
@@ -84,8 +83,6 @@
         #audio-control { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10001; transition: var(--transit-ultra); backdrop-filter: blur(10px); }
         #audio-control:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
         #audio-icon { font-size: 1.2rem; }
-
-        @media (max-width: 850px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; flex-direction: row; padding: 15px; border-right: none; } .sidebar h2 { display: none; } .main-content { padding: 30px; } .close-btn { top: 15px; right: 20px; font-size: 2.5rem; } }
 
         /* ==========================================================
            INTERACTIVE COMMENT SECTION CSS 
@@ -133,30 +130,45 @@
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
         
         /* ==========================================================
-           FIX TOTAL: TULISAN HILANG, AUTO ZOOM & MENU (KALIBRASI ULANG)
+           FIX TOTAL: SISTEM ISOLASI SCROLL & ANTI-ZOOM (DVH)
            ========================================================== */
         @media screen and (max-width: 850px) {
-            /* Sidebar Kunci Atas */
+            /* 1. Sidebar dibuat tinggi paten 75px */
             .sidebar {
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
                 right: 0 !important;
                 width: 100% !important;
+                height: 75px !important; 
                 z-index: 999999 !important;
                 background: rgba(10, 15, 25, 0.98) !important;
                 backdrop-filter: blur(15px) !important;
                 transform: none !important;
+                justify-content: center;
+                align-items: center;
+                padding: 10px !important;
             }
 
-            /* SOLUSI TULISAN HILANG: Dorong secara absolut dari luar, bukan dalam */
+            .sidebar h2 { display: none; }
+            .close-btn { top: 15px; right: 20px; font-size: 2.5rem; }
+
+            /* 2. ISOLASI MAIN CONTENT: Mulai persis di bawah menu (TIDAK AKAN KETUTUP) */
             .main-content {
-                margin-top: 80px !important; /* Paksa turun konten agar judul 100% terlihat */
-                padding-top: 20px !important; 
-                padding-bottom: 25vh !important; /* Ruang napas secukupnya buat keyboard */
+                position: fixed !important;
+                top: 75px !important; /* Batas atas mentok di bawah menu */
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                height: calc(100dvh - 75px) !important; /* Gunakan DVH agar otomatis mengecil saat keyboard HP naik! */
+                overflow-y: auto !important; /* Scroll hanya terjadi di dalam kotak ini */
+                margin: 0 !important;
+                padding: 25px !important;
+                padding-bottom: 40vh !important; /* Tambahan ruang napas saat ngetik */
             }
 
-            /* Matikan Auto-Zoom HP */
+            /* 3. Matikan Zoom Otomatis */
             input[type="text"], 
             textarea, 
             .comment-name, 
@@ -165,6 +177,7 @@
             #comment-text {
                 font-size: 16px !important;
                 touch-action: manipulation !important;
+                scroll-margin-top: 20px !important; /* Mencegah layar lompat terlalu sadis */
             }
         }
     </style>
