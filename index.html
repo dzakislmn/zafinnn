@@ -42,21 +42,8 @@
         .section.active { display: block; opacity: 1; transform: scale(1) translateY(0); }
 
         /* --- SPOTIFY BOX STYLE --- */
-        .spotify-box {
-            display: flex; align-items: center; gap: 20px;
-            background: rgba(29, 185, 84, 0.1);
-            border: 1px solid rgba(29, 185, 84, 0.3);
-            padding: 20px; border-radius: 25px;
-            margin-top: 30px; cursor: pointer;
-            transition: var(--transit-ultra);
-            text-decoration: none; color: inherit;
-        }
-        .spotify-box:hover {
-            background: rgba(29, 185, 84, 0.2);
-            border-color: #1DB954;
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.2);
-        }
+        .spotify-box { display: flex; align-items: center; gap: 20px; background: rgba(29, 185, 84, 0.1); border: 1px solid rgba(29, 185, 84, 0.3); padding: 20px; border-radius: 25px; margin-top: 30px; cursor: pointer; transition: var(--transit-ultra); text-decoration: none; color: inherit; }
+        .spotify-box:hover { background: rgba(29, 185, 84, 0.2); border-color: #1DB954; transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 30px rgba(29, 185, 84, 0.2); }
         .spotify-icon { width: 50px; height: 50px; background: #1DB954; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
         .spotify-text h4 { margin: 0; font-family: 'Orbitron'; font-size: 1rem; color: #1DB954; }
         .spotify-text p { margin: 5px 0 0; font-size: 0.8rem; color: var(--text-dim); }
@@ -80,21 +67,67 @@
         #lightbox.visible { display: flex; opacity: 1; }
 
         /* --- AUDIO CONTROL --- */
-        #audio-control {
-            position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            z-index: 10001; transition: var(--transit-ultra); backdrop-filter: blur(10px);
-        }
+        #audio-control { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10001; transition: var(--transit-ultra); backdrop-filter: blur(10px); }
         #audio-control:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
         #audio-icon { font-size: 1.2rem; }
 
-        @media (max-width: 850px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; padding: 15px; border-right: none; }
-            .sidebar h2 { display: none; }
-            .main-content { padding: 30px; }
-        }
+        @media (max-width: 850px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; flex-direction: row; padding: 15px; border-right: none; } .sidebar h2 { display: none; } .main-content { padding: 30px; } }
+
+        /* ==========================================================
+           INTERACTIVE COMMENT SECTION CSS (ULTRA UNIQUE UPGRADE) 
+           ========================================================== */
+        .comment-section { margin-top: 30px; text-align: left; cursor: default; position: relative; }
+        
+        .comment-box-wrapper { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 25px; }
+        
+        /* Input Nama (Callsign) */
+        .input-group-name { display: flex; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px 15px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: var(--transit-ultra); }
+        .input-group-name:focus-within { border-color: var(--nebula-blue); box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); background: rgba(0, 0, 0, 0.5); transform: scale(1.01); }
+        .input-icon { margin-right: 12px; font-size: 1.2rem; filter: drop-shadow(0 0 5px var(--nebula-blue)); }
+        .comment-name { flex: 1; background: transparent; border: none; color: var(--nebula-blue); font-family: 'Orbitron', sans-serif; font-size: 0.95rem; outline: none; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        .comment-name::placeholder { color: rgba(0, 210, 255, 0.3); font-family: 'Quicksand', sans-serif; letter-spacing: normal; font-weight: normal; text-transform: none; }
+
+        /* Input Textarea */
+        .comment-input { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px; color: var(--text-main); font-family: 'Quicksand', sans-serif; resize: none; outline: none; transition: var(--transit-ultra); margin-bottom: 15px; }
+        .comment-input:focus { border-color: var(--nebula-purple); box-shadow: 0 0 15px rgba(161, 140, 209, 0.2); background: rgba(0, 0, 0, 0.5); transform: scale(1.01); }
+        
+        /* Animasi Goyang jika form kosong */
+        @keyframes errorShake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-8px);} 75% {transform: translateX(8px);} }
+        .shake-active { animation: errorShake 0.4s var(--ease-out-expo); border-color: #ff4757 !important; box-shadow: 0 0 15px rgba(255, 71, 87, 0.4) !important; }
+
+        .comment-tools { display: flex; justify-content: space-between; align-items: center; }
+        .quick-emojis span { cursor: pointer; font-size: 1.3rem; margin-right: 8px; transition: 0.2s; display: inline-block; }
+        .quick-emojis span:hover { transform: scale(1.4) translateY(-3px); filter: drop-shadow(0 0 5px rgba(255,255,255,0.8)); }
+
+        .comment-btn { position: relative; overflow: hidden; background: linear-gradient(135deg, #00d2ff 0%, #a18cd1 100%); color: white; border: none; padding: 12px 25px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: var(--transit-ultra); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
+        .comment-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4); }
+        .comment-btn:active { transform: scale(0.95); }
+        
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 300px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { display: block; width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--nebula-blue), var(--nebula-purple)); border-radius: 10px; }
+        
+        /* Desain Item Komentar (Hologram ID Style) */
+        .comment-item { background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.4) 100%); padding: 18px; border-radius: 15px; border-left: 4px solid; font-size: 0.95rem; animation: slideIn 0.5s var(--ease-out-expo); word-break: break-word; position: relative; overflow: hidden; }
+        .comment-item::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><line x1="0" y1="0" x2="100" y2="100" stroke="rgba(255,255,255,0.02)" stroke-width="1"/></svg>'); pointer-events: none; }
+        .comment-item:nth-child(odd) { border-left-color: var(--nebula-blue); }
+        .comment-item:nth-child(even) { border-left-color: var(--nebula-purple); }
+        
+        .comment-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+        .comment-author-info { display: flex; flex-direction: column; gap: 3px; }
+        
+        .author-name { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 800; color: white; text-shadow: 0 0 8px rgba(255,255,255,0.4); letter-spacing: 1px; }
+        .space-role { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,0.1); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; display: inline-block; width: max-content; }
+        .space-role.blue { color: var(--nebula-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+        .space-role.purple { color: var(--nebula-purple); box-shadow: 0 0 10px rgba(161, 140, 209, 0.2); }
+        
+        .comment-date { font-size: 0.7rem; color: var(--text-dim); text-align: right; }
+        .comment-text-body { line-height: 1.6; color: rgba(255,255,255,0.9); font-style: italic; position: relative; padding-left: 10px; }
+        
+        /* Flying Particles Animation */
+        .fly-particle { position: absolute; pointer-events: none; animation: flyUp 1.2s ease-out forwards; z-index: 50; }
+        @keyframes flyUp { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120px) scale(1.8) rotate(20deg); opacity: 0; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
     </style>
 </head>
 <body>
@@ -104,10 +137,7 @@
     <audio id="char-sfx" src="Character.mp3"></audio>
     <audio id="global-click-sfx" src="Klik.wav"></audio>
 
-    <div id="audio-control" onclick="toggleAudio()">
-        <span id="audio-icon">⏸️</span>
-    </div>
-
+    <div id="audio-control" onclick="toggleAudio()"><span id="audio-icon">⏸️</span></div>
     <canvas id="star-canvas"></canvas>
     <div id="custom-cursor"></div>
     <div id="cursor-trail"></div>
@@ -124,13 +154,12 @@
     </div>
 
     <div class="main-content">
-        <h1 id="title">Command Center</h1>
+        <h1 id="title">Pusat Pengendali Rindu Galaktik 📡</h1>
 
         <div id="dash" class="section active">
             <div class="profile-card" style="cursor: default; text-align: left;">
                 <h3 style="font-family: 'Orbitron';">System Online ✨</h3>
-                <p style="color: var(--text-dim); line-height: 1.8;">Selamat datang kembali di pusat kendali. Modul musik romantis siap diluncurkan.</p>
-                
+                <p style="color: var(--text-dim); line-height: 1.8;">Selamat datang. Kami pernah mengira alam semesta ini terlalu luas untuk dijelajahi, sampai akhirnya kami menyadari bahwa alam semesta kami ada pada diri satu sama lain. Selamat menikmati perjalanan orbit kami! 🛰️✨.</p>
                 <a href="https://open.spotify.com/playlist/0kccGcW8Let4mC5bTSnJE1?si=AMxwLbOITtWQ2oxnRAu0lA&pi=jZmpQ6pJTyirT" target="_blank" class="spotify-box">
                     <div class="spotify-icon">♫</div>
                     <div class="spotify-text">
@@ -138,6 +167,32 @@
                         <p>Klik untuk mendengarkan lagu bersama 🚀</p>
                     </div>
                 </a>
+            </div>
+
+            <div class="profile-card comment-section" id="comment-container">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 15px;">
+                    <h4 style="font-family: 'Orbitron'; color: var(--nebula-purple); margin: 0; font-size: 1.1rem;">Transmission Log 📡</h4>
+                    <span id="typing-status" style="font-size:0.75rem; color:var(--nebula-blue); opacity:0; transition:0.3s; font-style:italic;">Menyandikan sinyal...</span>
+                </div>
+                
+                <div class="comment-box-wrapper">
+                    <div class="input-group-name" id="name-container">
+                        <span class="input-icon">🆔</span>
+                        <input type="text" id="comment-name" class="comment-name" placeholder="Masukkan Callsign / Namamu..." autocomplete="off">
+                    </div>
+
+                    <textarea id="comment-text" class="comment-input" rows="3" placeholder="Kirim transmisi rahasia ke luar angkasa... 🛸"></textarea>
+                    
+                    <div class="comment-tools">
+                        <div class="quick-emojis" onclick="insertEmoji(event)">
+                            <span>💖</span><span>👽</span><span>🚀</span><span>☄️</span><span>👀</span>
+                        </div>
+                        <button id="send-btn" class="comment-btn" onclick="addComment()">Luncurkan! 🚀</button>
+                    </div>
+                </div>
+                
+                <div id="comment-list" class="comment-list">
+                    </div>
             </div>
         </div>
 
@@ -173,8 +228,16 @@
         <div id="memories" class="section">
             <div class="vault-container">
                 <div class="vault-item">
-                    <div class="media-box" onclick="openLightbox('img', 'MEMORY_FOTO_1.jpg')"><span>[ VIEW PHOTO ]</span></div>
-                    <div class="vault-info"><h4>Supernova Moment ☄️</h4></div>
+                    <div class="media-box" onclick="openLightbox('img', 'IMG 3.jpeg')"><span>[ VIEW PHOTO ]</span></div>
+                    <div class="vault-info"><h4>21 FEBUARI 2026</h4></div>
+                </div>
+                <div class="vault-item">
+                    <div class="media-box" onclick="openLightbox('img', 'IMG 2.jpeg')"><span>[ VIEW PHOTO ]</span></div>
+                    <div class="vault-info"><h4>21 FEBUARI 2026</h4></div>
+                </div>
+                <div class="vault-item">
+                    <div class="media-box" onclick="openLightbox('img', 'IMG 1.jpeg')"><span>[ VIEW PHOTO ]</span></div>
+                    <div class="vault-info"><h4>21 FEBUARI 2026</h4></div>
                 </div>
                 <div class="vault-item">
                     <div class="media-box" onclick="openLightbox('vid', 'MEMORY_VIDEO_1.mp4')"><span>[ VIEW VIDEO ]</span></div>
@@ -202,59 +265,42 @@
         function updateTrail() { trailX += (mouseX - trailX) * 0.15; trailY += (mouseY - trailY) * 0.15; t.style.left = trailX + 'px'; t.style.top = trailY + 'px'; requestAnimationFrame(updateTrail); }
         updateTrail();
 
-        // --- GLOBAL CLICK SFX HANDLER (NEW) ---
+        // --- GLOBAL CLICK SFX HANDLER (LOCKED) ---
         document.addEventListener('click', function(e) {
             const isMenu = e.target.closest('.menu-item');
             const isCharacterCard = e.target.closest('.profile-card[onclick="toggleProfile(this)"]');
             const isPhotoWrapper = e.target.closest('.profile-img-wrapper');
             const isProfileDetails = e.target.closest('.profile-details');
 
-            // 1. Kecuali: Menu Tab (Sudah ada suara Tap dasboard.mp3)
             if (isMenu) return;
-            
-            // 2. Kecuali: Kartu Karakter (Sudah ada suara Character.mp3)
-            // Namun, jika yang diklik di DALAM kartu adalah fotonya atau detailnya, kita biarkan suara klik biasa berjalan.
             if (isCharacterCard && !isPhotoWrapper && !isProfileDetails) return;
 
-            // Memutar suara klik universal
             const globalSfx = document.getElementById('global-click-sfx');
             if (globalSfx) {
                 globalSfx.currentTime = 0;
                 globalSfx.play().catch(err => console.log("Global click play failed:", err));
             }
-        }, true); // Parameter `true` (Capture) agar suara tetap keluar meski ada stopPropagation
+        }, true);
 
         // --- TAB SYSTEM WITH SFX ---
         function tab(e, id) {
             const sfx = document.getElementById('tab-sfx');
-            if (sfx) { sfx.currentTime = 0; sfx.play().catch(err => console.log("SFX play failed:", err)); }
-
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(s => { s.classList.remove('active'); s.style.display='none'; });
+            if (sfx) { sfx.currentTime = 0; sfx.play(); }
+            document.querySelectorAll('.section').forEach(s => { s.classList.remove('active'); s.style.display='none'; });
             const target = document.getElementById(id);
             target.style.display = 'block';
             setTimeout(() => target.classList.add('active'), 50);
-            if(id === 'memories') {
-                document.querySelectorAll('.vault-item').forEach((it, i) => {
-                    setTimeout(() => it.classList.add('show'), i * 150);
-                });
-            }
+            if(id === 'memories') { document.querySelectorAll('.vault-item').forEach((it, i) => setTimeout(() => it.classList.add('show'), i * 150)); }
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             e.currentTarget.classList.add('active');
         }
 
-        // --- PROFILE TOGGLE SYSTEM WITH SFX ---
         function toggleProfile(cardElement) {
             cardElement.classList.toggle('expanded');
-            
             const charSfx = document.getElementById('char-sfx');
-            if (charSfx) {
-                charSfx.currentTime = 0;
-                charSfx.play().catch(err => console.log("Character SFX play failed:", err));
-            }
+            if (charSfx) { charSfx.currentTime = 0; charSfx.play(); }
         }
 
-        // --- LIGHTBOX ---
         function openLightbox(type, src) {
             const l = document.getElementById('lightbox');
             const cont = document.getElementById('lightbox-content');
@@ -265,28 +311,130 @@
         function closeLightbox() {
             const l = document.getElementById('lightbox');
             l.classList.remove('visible');
-            setTimeout(() => { l.style.display = 'none'; }, 600);
+            setTimeout(() => l.style.display = 'none', 600);
         }
 
-        // --- AUDIO CONTROLS ---
         const bgMusic = document.getElementById('bg-music');
         const audioIcon = document.getElementById('audio-icon');
+        document.body.addEventListener('click', () => { if (bgMusic.paused && audioIcon.innerText === '⏸️') bgMusic.play(); }, { once: true });
+        function toggleAudio() { if (bgMusic.paused) { bgMusic.play(); audioIcon.innerText = '⏸️'; } else { bgMusic.pause(); audioIcon.innerText = '▶️'; } }
 
-        document.body.addEventListener('click', () => {
-             if (bgMusic.paused && audioIcon.innerText === '⏸️') {
-                 bgMusic.play().catch(error => console.log("Audio play failed:", error));
-             }
-        }, { once: true });
+        /* ==========================================================
+           INTERACTIVE COMMENT SYSTEM LOGIC (NEW & UNIQUE)
+           ========================================================== */
+        const nameInput = document.getElementById('comment-name');
+        const inputField = document.getElementById('comment-text');
+        const statusText = document.getElementById('typing-status');
+        
+        // Pesan status lucu saat ngetik
+        const funnyStatuses = ["Menyusun kata-kata puitis...", "Memindai sinyal rindu...", "Awas typo kapten! 👀", "Mendeteksi bucin level 99...💖", "Menyuap alien dengan cilok...👽"];
 
-        function toggleAudio() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                audioIcon.innerText = '⏸️';
+        inputField.addEventListener('input', () => {
+            if(inputField.value.length > 0) {
+                statusText.style.opacity = '1';
+                let idx = Math.floor(inputField.value.length / 8) % funnyStatuses.length;
+                statusText.innerText = funnyStatuses[idx];
             } else {
-                bgMusic.pause();
-                audioIcon.innerText = '▶️';
+                statusText.style.opacity = '0';
+            }
+        });
+
+        // Insert Emoji Cepat
+        function insertEmoji(e) {
+            if(e.target.tagName === 'SPAN') {
+                inputField.value += e.target.innerText;
+                inputField.focus();
+                inputField.dispatchEvent(new Event('input'));
             }
         }
+
+        function loadComments() {
+            const list = document.getElementById('comment-list');
+            const comments = JSON.parse(localStorage.getItem('spaceComments')) || [];
+            list.innerHTML = '';
+            comments.forEach((c, index) => {
+                const colorClass = index % 2 === 0 ? 'blue' : 'purple';
+                const avatarIcon = index % 2 === 0 ? '👨‍🚀' : '👩‍🚀';
+                
+                list.innerHTML += `
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <div class="comment-author-info">
+                                <span class="author-name">${avatarIcon} ${c.name}</span>
+                                <span class="space-role ${colorClass}">${c.role}</span>
+                            </div>
+                            <span class="comment-date">${c.date}</span>
+                        </div>
+                        <div class="comment-text-body">"${c.text}"</div>
+                    </div>`;
+            });
+        }
+
+        function addComment() {
+            const name = nameInput.value.trim();
+            const text = inputField.value.trim();
+            const nameContainer = document.getElementById('name-container');
+            
+            let hasError = false;
+
+            // Goyang kalau kosong!
+            if (!name) {
+                nameContainer.classList.add('shake-active');
+                hasError = true;
+            }
+            if (!text) {
+                inputField.classList.add('shake-active');
+                hasError = true;
+            }
+
+            if (hasError) {
+                setTimeout(() => {
+                    nameContainer.classList.remove('shake-active');
+                    inputField.classList.remove('shake-active');
+                }, 400);
+                return;
+            }
+
+            // Terbang partikel roket & bintang
+            const btn = document.getElementById('send-btn');
+            spawnParticle('🚀', btn, -20);
+            setTimeout(() => spawnParticle('✨', btn, 10), 100);
+            setTimeout(() => spawnParticle('💖', btn, 40), 200);
+
+            const comments = JSON.parse(localStorage.getItem('spaceComments')) || [];
+            const dateObj = new Date();
+            const dateStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) + ' ' + dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            
+            // Random Pangkat Luar Angkasa
+            const roles = ["Kapten Bucin", "Alien Gemes", "Komet Nyasar", "Panglima Rindu", "Mata-mata Galaksi", "Bintang Jatuh"];
+            const randomRole = roles[Math.floor(Math.random() * roles.length)];
+
+            comments.unshift({ name: name, text: text, date: dateStr, role: randomRole }); 
+            localStorage.setItem('spaceComments', JSON.stringify(comments));
+            
+            inputField.value = '';
+            statusText.style.opacity = '0';
+            loadComments();
+        }
+
+        function spawnParticle(emoji, targetElem, offsetX) {
+            const el = document.createElement('div');
+            el.innerText = emoji;
+            el.className = 'fly-particle';
+            el.style.fontSize = '1.5rem';
+            
+            const rect = targetElem.getBoundingClientRect();
+            const container = document.getElementById('comment-container');
+            
+            el.style.left = (targetElem.offsetLeft + (targetElem.offsetWidth / 2) + offsetX) + 'px';
+            el.style.top = (targetElem.offsetTop) + 'px';
+            
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 1200);
+        }
+
+        // Muat pas awal
+        loadComments();
     </script>
 </body>
 </html>
