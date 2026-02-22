@@ -311,16 +311,23 @@
            const sfx = document.getElementById('tab-sfx');
            if (sfx) { sfx.currentTime = 0; sfx.play(); }
       
+           // 1. Tutup semua kartu karakter yang terbuka agar tidak nyangkut
+           document.querySelectorAll('.profile-card').forEach(card => card.classList.remove('expanded'));
+      
            document.querySelectorAll('.section').forEach(s => { s.classList.remove('active'); s.style.display='none'; });
            const target = document.getElementById(id);
-          
-           // 1. Buka dulu pintu ruangannya
            target.style.display = 'block';
           
-           // 2. BUG FIX: SETELAH ruangan terbuka, baru lift ditarik paksa ke paling atas seketika!
-           document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'instant' });
+           // 2. Matikan smooth sejenak, paksa lempar ke atas, lalu hidupkan lagi
+           const mainContent = document.querySelector('.main-content');
+           mainContent.style.scrollBehavior = 'auto'; // Matikan smooth
+           mainContent.scrollTop = 0; // Lempar ke atas paksa!
+          
+           setTimeout(() => {
+               mainContent.style.scrollBehavior = 'smooth'; // Hidupkan smooth lagi
+               target.classList.add('active');
+           }, 50);
       
-           setTimeout(() => target.classList.add('active'), 50);
            if(id === 'memories') { document.querySelectorAll('.vault-item').forEach((it, i) => setTimeout(() => it.classList.add('show'), i * 150)); }
            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
            e.currentTarget.classList.add('active');
