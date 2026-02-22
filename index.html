@@ -62,7 +62,7 @@
         .vault-item { background: var(--card-glass); border-radius: 40px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255, 255, 255, 0.03); transition: var(--transit-ultra); opacity: 0; transform: translateY(40px); }
         .vault-item.show { opacity: 1; transform: translateY(0); }
         
-        /* --- BUG FIX: MEDIA PREVIEW & LIGHTBOX RESPONSIVENESS --- */
+        /* --- MEDIA PREVIEW & LIGHTBOX RESPONSIVENESS --- */
         .media-box { width: 100%; height: 250px; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; }
         .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; transition: var(--transit-ultra); pointer-events: none; }
         .media-box:hover img, .media-box:hover video { transform: scale(1.05); filter: brightness(0.6); }
@@ -71,15 +71,11 @@
         .vault-info { padding: 20px; text-align: center; }
         .vault-info h4 { margin: 0; font-family: 'Orbitron'; font-size: 1.1rem; }
 
-        /* --- LIGHTBOX BUG FIX (SIZE & CLOSE BUTTON) --- */
+        /* --- LIGHTBOX (SIZE & CLOSE BUTTON) --- */
         #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); display: none; z-index: 20000; justify-content: center; align-items: center; backdrop-filter: blur(20px); opacity: 0; transition: opacity 0.6s var(--ease-out-expo); }
         #lightbox.visible { display: flex; opacity: 1; }
-        
-        /* Tombol Close Baru */
         .close-btn { position: absolute; top: 25px; right: 40px; color: rgba(255,255,255,0.7); font-size: 3rem; font-family: sans-serif; cursor: pointer; z-index: 20001; transition: 0.3s; line-height: 1; }
         .close-btn:hover { color: var(--nebula-blue); transform: scale(1.2); }
-
-        /* Penyesuaian Responsif agar tidak Zoom raksasa */
         #lightbox-content { width: 90vw; height: 85vh; display: flex; justify-content: center; align-items: center; position: relative; }
         #lightbox-content img, #lightbox-content video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2); }
 
@@ -91,17 +87,15 @@
         @media (max-width: 850px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; flex-direction: row; padding: 15px; border-right: none; } .sidebar h2 { display: none; } .main-content { padding: 30px; } .close-btn { top: 15px; right: 20px; font-size: 2.5rem; } }
 
         /* ==========================================================
-           INTERACTIVE COMMENT SECTION CSS (ULTRA UNIQUE UPGRADE) 
+           INTERACTIVE COMMENT SECTION CSS 
            ========================================================== */
         .comment-section { margin-top: 30px; text-align: left; cursor: default; position: relative; }
         .comment-box-wrapper { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 25px; }
-        
         .input-group-name { display: flex; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px 15px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: var(--transit-ultra); }
         .input-group-name:focus-within { border-color: var(--nebula-blue); box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); background: rgba(0, 0, 0, 0.5); transform: scale(1.01); }
         .input-icon { margin-right: 12px; font-size: 1.2rem; filter: drop-shadow(0 0 5px var(--nebula-blue)); }
         .comment-name { flex: 1; background: transparent; border: none; color: var(--nebula-blue); font-family: 'Orbitron', sans-serif; font-size: 0.95rem; outline: none; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
         .comment-name::placeholder { color: rgba(0, 210, 255, 0.3); font-family: 'Quicksand', sans-serif; letter-spacing: normal; font-weight: normal; text-transform: none; }
-
         .comment-input { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px; color: var(--text-main); font-family: 'Quicksand', sans-serif; resize: none; outline: none; transition: var(--transit-ultra); margin-bottom: 15px; }
         .comment-input:focus { border-color: var(--nebula-purple); box-shadow: 0 0 15px rgba(161, 140, 209, 0.2); background: rgba(0, 0, 0, 0.5); transform: scale(1.01); }
         
@@ -111,7 +105,6 @@
         .comment-tools { display: flex; justify-content: space-between; align-items: center; }
         .quick-emojis span { cursor: pointer; font-size: 1.3rem; margin-right: 8px; transition: 0.2s; display: inline-block; }
         .quick-emojis span:hover { transform: scale(1.4) translateY(-3px); filter: drop-shadow(0 0 5px rgba(255,255,255,0.8)); }
-
         .comment-btn { position: relative; overflow: hidden; background: linear-gradient(135deg, #00d2ff 0%, #a18cd1 100%); color: white; border: none; padding: 12px 25px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: var(--transit-ultra); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.2); }
         .comment-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4); }
         .comment-btn:active { transform: scale(0.95); }
@@ -127,12 +120,10 @@
         
         .comment-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
         .comment-author-info { display: flex; flex-direction: column; gap: 3px; }
-        
         .author-name { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 800; color: white; text-shadow: 0 0 8px rgba(255,255,255,0.4); letter-spacing: 1px; }
         .space-role { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,0.1); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; display: inline-block; width: max-content; }
         .space-role.blue { color: var(--nebula-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         .space-role.purple { color: var(--nebula-purple); box-shadow: 0 0 10px rgba(161, 140, 209, 0.2); }
-        
         .comment-date { font-size: 0.7rem; color: var(--text-dim); text-align: right; }
         .comment-text-body { line-height: 1.6; color: rgba(255,255,255,0.9); font-style: italic; position: relative; padding-left: 10px; }
         
@@ -140,36 +131,37 @@
         @keyframes flyUp { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120px) scale(1.8) rotate(20deg); opacity: 0; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
         
-        /* FIX TOTAL: MENU NAVIGASI WAJIB STAY DI ATAS HP */
-        @media screen and (max-width: 768px) {
-            /* 1. Paksa menu nempel di paling atas layar, titik! */
-            .nav-menu, header {
+        /* ==========================================================
+           FIX TOTAL: AUTO ZOOM & MENU HILANG DI HP (UPDATE FINAL)
+           ========================================================== */
+        @media screen and (max-width: 850px) {
+            /* 1. Paksa Menu Utama (.sidebar) nempel di atap layar */
+            .sidebar {
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
                 right: 0 !important;
-                width: 100vw !important;
-                height: auto !important;
-                min-height: 50px !important;
-                z-index: 9999999 !important; /* Paling depan dari segala elemen */
-                background: #000 !important; /* Warna hitam solid biar gak tembus pandang */
-                transform: none !important; /* Menghilangkan efek gerak yang ganggu */
+                width: 100% !important;
+                z-index: 9999999 !important;
+                background: rgba(10, 15, 25, 0.98) !important;
+                backdrop-filter: blur(15px) !important;
+                transform: none !important;
             }
 
-            /* 2. Supaya konten web gak ketutupan menu yang dipaku di atas */
-            body {
-                margin-top: 70px !important; 
-                padding-top: 0 !important;
-                overflow-x: hidden !important;
+            /* 2. Dorong konten web ke bawah supaya gak ketutupan menu yang dipaku */
+            .main-content {
+                padding-top: 90px !important;
             }
 
-            /* 3. Matikan Auto-Zoom saat ngetik yang bikin layar berantakan */
+            /* 3. Matikan Auto-Zoom HP (Font Input WAJIB 16px) */
             input[type="text"], 
             textarea, 
-            #comment-name, 
+            .comment-name, 
+            .comment-input,
+            #comment-name,
             #comment-text {
                 font-size: 16px !important;
-                touch-action: manipulation;
+                touch-action: manipulation !important;
             }
         }
     </style>
@@ -187,7 +179,7 @@
     <div id="cursor-trail"></div>
 
     <div id="lightbox" onclick="closeLightbox()">
-        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <span class="close-btn" onclick="closeLightbox()">×</span>
         <div id="lightbox-content" onclick="event.stopPropagation()"></div>
     </div>
 
@@ -355,18 +347,17 @@
             }
         }, true);
 
-       // --- TAB SYSTEM WITH SFX ---
+        // --- TAB SYSTEM WITH SFX ---
        function tab(e, id) {
            const sfx = document.getElementById('tab-sfx');
            if (sfx) { sfx.currentTime = 0; sfx.play(); }
       
            // 1. Tutup semua kartu karakter yang terbuka agar tidak nyangkut
            document.querySelectorAll('.profile-card').forEach(card => card.classList.remove('expanded'));
-      
            document.querySelectorAll('.section').forEach(s => { s.classList.remove('active'); s.style.display='none'; });
            const target = document.getElementById(id);
            target.style.display = 'block';
-          
+           
            // 2. Matikan smooth sejenak, paksa lempar ke atas, lalu hidupkan lagi
            const mainContent = document.querySelector('.main-content');
            mainContent.style.scrollBehavior = 'auto'; // Matikan smooth
@@ -376,7 +367,7 @@
                mainContent.style.scrollBehavior = 'smooth'; // Hidupkan smooth lagi
                target.classList.add('active');
            }, 50);
-      
+
            if(id === 'memories') { document.querySelectorAll('.vault-item').forEach((it, i) => setTimeout(() => it.classList.add('show'), i * 150)); }
            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
            e.currentTarget.classList.add('active');
@@ -435,7 +426,6 @@
         const statusText = document.getElementById('typing-status');
         
         const funnyStatuses = ["Menyusun kata-kata puitis...", "Memindai sinyal rindu...", "Awas typo kapten! 👀", "Mendeteksi bucin level 99...💖", "Menyuap alien dengan cilok...👽"];
-
         inputField.addEventListener('input', () => {
             if(inputField.value.length > 0) {
                 statusText.style.opacity = '1';
@@ -462,8 +452,8 @@
                 const colorClass = index % 2 === 0 ? 'blue' : 'purple';
                 const avatarIcon = index % 2 === 0 ? '👨‍🚀' : '👩‍🚀';
                 
-                list.innerHTML += `
-                    <div class="comment-item">
+                list.innerHTML += 
+                    `<div class="comment-item">
                         <div class="comment-header">
                             <div class="comment-author-info">
                                 <span class="author-name">${avatarIcon} ${c.name}</span>
@@ -499,13 +489,11 @@
             const comments = JSON.parse(localStorage.getItem('spaceComments')) || [];
             const dateObj = new Date();
             const dateStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) + ' ' + dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            
             const roles = ["Kapten Bucin", "Alien Gemes", "Komet Nyasar", "Panglima Rindu", "Mata-mata Galaksi", "Bintang Jatuh"];
             const randomRole = roles[Math.floor(Math.random() * roles.length)];
 
             comments.unshift({ name: name, text: text, date: dateStr, role: randomRole }); 
             localStorage.setItem('spaceComments', JSON.stringify(comments));
-            
             inputField.value = '';
             statusText.style.opacity = '0';
             loadComments();
@@ -519,7 +507,6 @@
             
             const rect = targetElem.getBoundingClientRect();
             const container = document.getElementById('comment-container');
-            
             el.style.left = (targetElem.offsetLeft + (targetElem.offsetWidth / 2) + offsetX) + 'px';
             el.style.top = (targetElem.offsetTop) + 'px';
             
@@ -528,12 +515,11 @@
         }
 
         loadComments();
-        
+
         // ==========================================================
         // FITUR TAMBAHAN: 3D INTERACTIVE HOVER (KURSOR & JARI)
         // ==========================================================
         const interactiveElements = document.querySelectorAll('.profile-card, .spotify-box, .vault-item, .comment-box-wrapper');
-
         interactiveElements.forEach(el => {
             // Efek saat kursor bergerak di atas elemen (Untuk PC/Laptop)
             el.addEventListener('mousemove', (e) => {
