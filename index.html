@@ -324,10 +324,14 @@
             const charSfx = document.getElementById('char-sfx');
             if (charSfx) { charSfx.currentTime = 0; charSfx.play(); }
 
-            // Logika Auto-Scroll saat kartu terbuka
+            // Logika Auto-Scroll yang DIPERBAIKI (Aman untuk Layar HP)
             if (cardElement.classList.contains('expanded')) {
                 setTimeout(() => {
-                    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const scrollArea = document.querySelector('.main-content');
+                    scrollArea.scrollTo({
+                        top: cardElement.offsetTop - 30, // Jarak aman 30px agar menu atas tidak tertabrak
+                        behavior: 'smooth'
+                    });
                 }, 300); 
             }
         }
