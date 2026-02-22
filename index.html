@@ -479,6 +479,57 @@
         }
 
         loadComments();
+        
+        // ==========================================================
+        // FITUR TAMBAHAN: 3D INTERACTIVE HOVER (KURSOR & JARI)
+        // ==========================================================
+        const interactiveElements = document.querySelectorAll('.profile-card, .spotify-box, .vault-item, .comment-box-wrapper');
+
+        interactiveElements.forEach(el => {
+            // Efek saat kursor bergerak di atas elemen (Untuk PC/Laptop)
+            el.addEventListener('mousemove', (e) => {
+                if (el.classList.contains('expanded')) return; // Kunci gerakan jika kartu sedang terbuka
+                
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Kalkulasi kemiringan 3D (Maksimal 8 derajat agar tetap elegan)
+                const rotateX = ((y - centerY) / centerY) * -8; 
+                const rotateY = ((x - centerX) / centerX) * 8;  
+
+                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                el.style.transition = 'transform 0.1s ease-out';
+            });
+
+            // Fungsi mengembalikan desain ke posisi datar
+            const resetTransform = () => {
+                if (el.classList.contains('expanded')) {
+                    el.style.transform = ''; // Biarkan CSS asli yang mengambil alih
+                    return;
+                }
+                el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                el.style.transition = 'var(--transit-ultra)'; // Gunakan transisi mulus bawaanmu
+                
+                // Bersihkan gaya paksa setelah animasi selesai agar tidak bentrok
+                setTimeout(() => {
+                    if (!el.classList.contains('expanded')) el.style.transform = '';
+                }, 800);
+            };
+
+            // Saat kursor pergi atau jari dilepas
+            el.addEventListener('mouseleave', resetTransform);
+            el.addEventListener('touchend', resetTransform);
+            
+            // Efek saat jari pertama kali menyentuh di layar HP (Memberi kesan empuk ditekan)
+            el.addEventListener('touchstart', () => {
+                if (el.classList.contains('expanded')) return;
+                el.style.transform = `perspective(1000px) scale(0.98)`;
+                el.style.transition = 'transform 0.2s ease-out';
+            }, {passive: true});
+        });
     </script>
 </body>
 </html>
