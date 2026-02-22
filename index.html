@@ -36,7 +36,7 @@
         .menu-item.active { background: linear-gradient(135deg, #00d2ff 0%, #a18cd1 100%); color: white; box-shadow: 0 15px 30px rgba(0, 210, 255, 0.2); transform: scale(1.05) translateX(5px); }
 
         /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 60px; overflow-y: auto; background: transparent; z-index: 5; position: relative; -webkit-overflow-scrolling: touch; }
+        .main-content { flex: 1; padding: 60px; overflow-y: auto; background: transparent; z-index: 5; position: relative; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
         #title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 800; margin-bottom: 40px; background: linear-gradient(to right, #fff, var(--nebula-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .section { display: none; opacity: 0; transform: scale(0.98) translateY(30px); transition: var(--transit-ultra); }
         .section.active { display: block; opacity: 1; transform: scale(1) translateY(0); }
@@ -323,6 +323,13 @@
             cardElement.classList.toggle('expanded');
             const charSfx = document.getElementById('char-sfx');
             if (charSfx) { charSfx.currentTime = 0; charSfx.play(); }
+
+            // Logika Auto-Scroll saat kartu terbuka
+            if (cardElement.classList.contains('expanded')) {
+                setTimeout(() => {
+                    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300); 
+            }
         }
 
         // --- LIGHTBOX FIX LOGIC ---
@@ -453,5 +460,4 @@
     </script>
 </body>
 </html>
-
 
