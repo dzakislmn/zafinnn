@@ -323,13 +323,17 @@
             cardElement.classList.toggle('expanded');
             const charSfx = document.getElementById('char-sfx');
             if (charSfx) { charSfx.currentTime = 0; charSfx.play(); }
-
-            // Logika Auto-Scroll yang DIPERBAIKI (Aman untuk Layar HP)
+        
+            // Logika Auto-Scroll SUPER AKURAT (Aman untuk Layar HP & Pasti Jalan)
             if (cardElement.classList.contains('expanded')) {
                 setTimeout(() => {
                     const scrollArea = document.querySelector('.main-content');
-                    scrollArea.scrollTo({
-                        top: cardElement.offsetTop - 30, // Jarak aman 30px agar menu atas tidak tertabrak
+                    const cardPos = cardElement.getBoundingClientRect();
+                    const areaPos = scrollArea.getBoundingClientRect();
+                    
+                    // Menghitung selisih jarak persis antara kartu dan batas atas area scroll
+                    scrollArea.scrollBy({
+                        top: cardPos.top - areaPos.top - 20, // 20px adalah jarak nafas agar tidak terlalu mepet atas
                         behavior: 'smooth'
                     });
                 }, 300); 
