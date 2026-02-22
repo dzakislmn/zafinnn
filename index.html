@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Master Space - Ultra Smooth Locked Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Orbitron:wght@400;800&display=swap" rel="stylesheet">
     <style>
@@ -139,6 +139,24 @@
         .fly-particle { position: absolute; pointer-events: none; animation: flyUp 1.2s ease-out forwards; z-index: 50; }
         @keyframes flyUp { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120px) scale(1.8) rotate(20deg); opacity: 0; } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+        
+        /* FIX OTOMATIS: Anti Zoom & Menu Tetap Aman */
+            @media screen and (max-width: 768px) {
+                input[type="text"], 
+                textarea,
+                #comment-name, 
+                #comment-text {
+                    font-size: 16px !important;
+                }
+                .nav-menu {
+                    position: fixed !important;
+                    top: 0 !important;
+                    z-index: 9999 !important;
+                }
+                body {
+                    overflow-x: hidden !important;
+                }
+            }
     </style>
 </head>
 <body>
@@ -234,7 +252,7 @@
                     <div class="profile-img-wrapper" onclick="event.stopPropagation(); openLightbox('img', 'database1.jpg')">
                         <div class="profile-img" style="background-image: url('database1.jpg'); border-color: var(--nebula-purple);"></div>
                     </div>
-                    <h3>[DEFINA]</h3>
+                    <h3>[Finnatt]</h3>
                     <p style="color:var(--nebula-purple); font-size:0.8rem; letter-spacing:3px; font-weight:700;">THE MOONLIGHT 🌕</p>
                     <div class="profile-details" onclick="event.stopPropagation()">
                         <div class="stat-label" style="font-size: 0.7rem; display:flex; justify-content:space-between; margin-bottom:5px;">Cuteness <span>100%</span></div>
